@@ -3,29 +3,66 @@
    =================================================================== */
 
 /* ---------------------------------------------------------------
-   Doodle poll link.
-   IMPORTANT: replace the placeholder below with your real Doodle
-   poll URL once you've created it, then commit + push. That's the
-   only change needed to wire up real availability collection.
+   WhatsApp group link, gated behind the raffle ticket code printed
+   on the bottom-left corner of the physical scratch card.
 ---------------------------------------------------------------- */
-const DOODLE_POLL_URL = "REPLACE_ME_WITH_DOODLE_LINK";
+const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/D7HGcSRGHAzHGSJ3Q9Ye0p";
+const RAFFLE_CODE = "002026-07-18";
+const UNLOCK_STORAGE_KEY = "schoezia-unlocked";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const doodleLink = document.getElementById("doodle-link");
-  if (doodleLink) {
-    doodleLink.href = DOODLE_POLL_URL;
-    if (DOODLE_POLL_URL.includes("REPLACE_ME")) {
-      doodleLink.addEventListener("click", (e) => {
-        e.preventDefault();
-        alert("The availability poll link hasn't been set up yet. Check back soon!");
-      });
-    }
-  }
-
   initScrollReveal();
   initScratchCard();
+  initUnlockGate();
   fireConfetti(120);
 });
+
+/* ---------------------- Raffle code unlock gate ---------------------- */
+function initUnlockGate() {
+  const box = document.getElementById("unlock-box");
+  const form = document.getElementById("unlock-form");
+  const input = document.getElementById("unlock-code");
+  const message = document.getElementById("unlock-message");
+  const successBox = document.getElementById("unlock-success");
+  const whatsappLink = document.getElementById("whatsapp-link");
+  if (!box || !form || !input || !successBox || !whatsappLink) return;
+
+  whatsappLink.href = WHATSAPP_GROUP_URL;
+
+  function normalize(code) {
+    return code.trim().toUpperCase();
+  }
+
+  function unlock() {
+    form.hidden = true;
+    successBox.hidden = false;
+    fireConfetti(90);
+  }
+
+  // Stay unlocked across visits on this device.
+  if (localStorage.getItem(UNLOCK_STORAGE_KEY) === "true") {
+    unlock();
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const entered = normalize(input.value);
+
+    if (entered === normalize(RAFFLE_CODE)) {
+      message.textContent = "";
+      message.classList.remove("is-error");
+      localStorage.setItem(UNLOCK_STORAGE_KEY, "true");
+      unlock();
+    } else {
+      message.textContent = "That code doesn't match — double check your ticket and try again.";
+      message.classList.add("is-error");
+      box.classList.remove("is-shaking");
+      // restart animation
+      requestAnimationFrame(() => box.classList.add("is-shaking"));
+      input.select();
+    }
+  });
+}
 
 /* ---------------------- Scroll reveal ---------------------- */
 function initScrollReveal() {

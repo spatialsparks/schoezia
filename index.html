@@ -91,16 +91,40 @@
       <p class="availability__copy reveal">
         The only thing standing between us and that weekend in the vineyards is
         <em>one shared date</em>. To make sure everyone can actually be there &mdash;
-        Joel, Marzia, Manuel, Ramona, Alain, Celine and Rebecca &mdash; we're using a
-        quick poll to compare everyone's 2027 availability.
-      </p>
-      <p class="availability__copy availability__copy--small reveal">
-        It takes less than a minute. No account needed, just pick the weekends that work for you.
+        Joel, Marzia, Manuel, Ramona, Alain, Celine and Rebecca &mdash; we've set up a
+        private group chat where we'll sort out everyone's 2027 availability together.
       </p>
 
-      <a id="doodle-link" href="#" target="_blank" rel="noopener" class="btn btn--primary reveal">
-        Add My Availability
-      </a>
+      <div class="unlock-box reveal" id="unlock-box">
+        <p class="unlock-box__hint">
+          🎟️ Grab your scratch card and look at the <strong>bottom-left corner</strong> &mdash;
+          find your raffle ticket code and enter it below to unlock the group chat.
+        </p>
+
+        <form id="unlock-form" class="unlock-form" autocomplete="off">
+          <label for="unlock-code" class="unlock-form__label">Raffle Ticket Code</label>
+          <div class="unlock-form__row">
+            <input
+              type="text"
+              id="unlock-code"
+              name="unlock-code"
+              class="unlock-form__input"
+              placeholder="e.g. 000000-00-00"
+              inputmode="text"
+              required
+            >
+            <button type="submit" class="btn btn--primary unlock-form__btn">Unlock</button>
+          </div>
+          <p class="unlock-form__message" id="unlock-message" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="unlock-success" id="unlock-success" hidden>
+          <p class="unlock-success__text">Code accepted! Tap below to join the group chat.</p>
+          <a id="whatsapp-link" href="#" target="_blank" rel="noopener" class="btn btn--whatsapp">
+            Join The WhatsApp Group
+          </a>
+        </div>
+      </div>
 
       <p class="availability__names reveal">Joel &middot; Marzia &middot; Manuel &middot; Ramona &middot; Alain &middot; Celine &middot; Rebecca</p>
     </div>
