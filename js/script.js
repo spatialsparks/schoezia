@@ -5,10 +5,29 @@
 /* ---------------------------------------------------------------
    WhatsApp group link, gated behind the raffle ticket code printed
    on the bottom-left corner of the physical scratch card.
+
+   The link is base64-encoded and the code is stored only as a
+   SHA-256 hash, so neither is sitting around in plain text in this
+   file. This is obfuscation, not real security — a determined
+   person could still recover both by running the same code through
+   the browser console — but it stops the answer from being visible
+   at a glance in the page source or this file.
 ---------------------------------------------------------------- */
-const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/D7HGcSRGHAzHGSJ3Q9Ye0p";
-const RAFFLE_CODE = "002026-07-18";
+const WHATSAPP_GROUP_URL_B64 = "aHR0cHM6Ly9jaGF0LndoYXRzYXBwLmNvbS9EN0hHY1NSR0hBekhHU0ozUTlZZTBw";
+const RAFFLE_CODE_SHA256 = "0c691a6ae1bf2bfd74d25ade9ea3f460edf92a90ffbf50e12383db8730f8d4a4";
 const UNLOCK_STORAGE_KEY = "schoezia-unlocked";
+
+function decodeWhatsAppUrl() {
+  return atob(WHATSAPP_GROUP_URL_B64);
+}
+
+async function sha256Hex(text) {
+  const bytes = new TextEncoder().encode(text);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   initScrollReveal();
@@ -27,13 +46,12 @@ function initUnlockGate() {
   const whatsappLink = document.getElementById("whatsapp-link");
   if (!box || !form || !input || !successBox || !whatsappLink) return;
 
-  whatsappLink.href = WHATSAPP_GROUP_URL;
-
   function normalize(code) {
     return code.trim().toUpperCase();
   }
 
   function unlock() {
+    whatsappLink.href = decodeWhatsAppUrl();
     form.hidden = true;
     successBox.hidden = false;
     fireConfetti(90);
@@ -44,11 +62,12 @@ function initUnlockGate() {
     unlock();
   }
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const entered = normalize(input.value);
+    const enteredHash = await sha256Hex(entered);
 
-    if (entered === normalize(RAFFLE_CODE)) {
+    if (enteredHash === RAFFLE_CODE_SHA256) {
       message.textContent = "";
       message.classList.remove("is-error");
       localStorage.setItem(UNLOCK_STORAGE_KEY, "true");

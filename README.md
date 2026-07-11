@@ -27,20 +27,30 @@ The idea: each physical scratch card has a raffle ticket code printed in its
 bottom-left corner, and entering it here reveals the "Join The WhatsApp
 Group" button.
 
-Both the code and the WhatsApp invite link live at the top of
-[`js/script.js`](js/script.js):
+The code is stored as a SHA-256 hash and the WhatsApp link is base64-encoded
+at the top of [`js/script.js`](js/script.js), so neither is sitting around
+as plain text in the source:
 
 ```js
-const WHATSAPP_GROUP_URL = "https://chat.whatsapp.com/D7HGcSRGHAzHGSJ3Q9Ye0p";
-const RAFFLE_CODE = "002026-07-18";
+const WHATSAPP_GROUP_URL_B64 = "aHR0cHM6Ly9jaGF0LndoYXRzYXBwLmNvbS9EN0hHY1NSR0hBekhHU0ozUTlZZTBw";
+const RAFFLE_CODE_SHA256 = "0c691a6ae1bf2bfd74d25ade9ea3f460edf92a90ffbf50e12383db8730f8d4a4";
 ```
 
-Update either value and push to `main` to change them — GitHub Pages
-redeploys automatically within a minute or two.
+To change either value:
 
-Note: this is a client-side check only (fine for a fun gimmick tied to a
-physical gift), not real security — anyone who reads the page source can
-find the code and link.
+- **WhatsApp link**: base64-encode the new URL, e.g. in a browser console
+  run `btoa("https://your-new-link")`, and paste the result in.
+- **Raffle code**: compute its SHA-256 hex hash of the *uppercased, trimmed*
+  code, e.g. in a browser console run
+  `crypto.subtle.digest("SHA-256", new TextEncoder().encode("YOUR-CODE")).then(b => console.log(Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2,"0")).join("")))`,
+  and paste the resulting hex string in.
+
+Then commit and push to `main` — GitHub Pages redeploys automatically
+within a minute or two.
+
+Note: this is client-side obfuscation, not real security (fine for a fun
+gimmick tied to a physical gift) — anyone who runs the same hashing/decoding
+logic themselves could still recover both the code and the link.
 
 ## Local preview
 
