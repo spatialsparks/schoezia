@@ -1,0 +1,453 @@
+/* ===================================================================
+   Joel & Marzia — Wedding Scratch-Card Reveal
+   =================================================================== */
+
+:root {
+  --wine: #6b1524;
+  --wine-dark: #4a0e19;
+  --wine-deep: #2f0a12;
+  --gold: #d4af6a;
+  --gold-light: #f0dcae;
+  --cream: #fbf4e6;
+  --cream-soft: #f6ead2;
+  --ink: #2b1a15;
+
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Lato", -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --max-width: 880px;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; display: block; }
+
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.section-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+  text-align: center;
+  position: relative;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+
+.eyebrow--dark {
+  color: var(--wine);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  color: var(--wine-dark);
+  margin: 0 0 34px;
+  font-weight: 600;
+}
+
+.divider {
+  width: 220px;
+  margin: 0 auto 28px;
+  opacity: 0.9;
+}
+
+.divider--footer {
+  width: 180px;
+  margin: 0 auto 22px;
+  filter: brightness(1.6) saturate(0.6);
+  opacity: 0.85;
+}
+
+/* Background decorative blobs */
+.bg-decor {
+  position: fixed;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.18;
+  z-index: -1;
+  pointer-events: none;
+}
+.bg-decor--top-left {
+  top: -160px;
+  left: -160px;
+  background: var(--wine);
+}
+.bg-decor--bottom-right {
+  bottom: -160px;
+  right: -160px;
+  background: var(--gold);
+}
+
+/* ===================== HERO ===================== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 80px 20px 60px;
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 70%;
+  transform: scale(1.05);
+}
+
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(47, 10, 18, 0.75) 0%,
+    rgba(47, 10, 18, 0.55) 35%,
+    rgba(47, 10, 18, 0.82) 100%
+  );
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
+  text-align: center;
+  color: var(--cream);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hero .eyebrow {
+  animation: fadeInDown 1s ease both;
+}
+
+.hero__names {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 9vw, 4.4rem);
+  margin: 0 0 28px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 4px 24px rgba(0,0,0,0.35);
+  animation: fadeInUp 1s 0.15s ease both;
+}
+
+.hero__names .amp {
+  font-style: italic;
+  color: var(--gold-light);
+  padding: 0 8px;
+}
+
+.hero__tagline {
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: var(--cream-soft);
+  max-width: 480px;
+  margin: 30px 0 10px;
+  animation: fadeInUp 1s 0.3s ease both;
+}
+
+/* ---------- Scratch card ---------- */
+.scratch-stage {
+  animation: fadeInUp 1s 0.2s ease both;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.scratch-hint {
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--gold-light);
+  margin: 0 0 16px;
+  opacity: 0.9;
+}
+
+.scratch-card {
+  position: relative;
+  width: min(320px, 78vw);
+  height: min(320px, 78vw);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.45), 0 0 0 6px rgba(212,175,106,0.35);
+  background: var(--wine-deep);
+  touch-action: none;
+}
+
+.scratch-card__prize {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 45%, var(--gold-light) 0%, var(--gold) 55%, var(--wine) 100%);
+  text-align: center;
+}
+
+.scratch-prize__glow {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+}
+
+.scratch-prize__label {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 6vw, 2.1rem);
+  color: var(--wine-dark);
+  letter-spacing: 0.03em;
+  text-shadow: 0 2px 10px rgba(255,255,255,0.4);
+}
+
+#scratch-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+.scratch-card.is-revealed #scratch-canvas {
+  transition: opacity 0.5s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.scratch-card.is-revealed {
+  animation: revealPulse 0.6s ease;
+}
+
+/* Scroll cue */
+.scroll-cue {
+  margin-top: 34px;
+  width: 26px;
+  height: 42px;
+  border: 2px solid rgba(251,244,230,0.6);
+  border-radius: 14px;
+  position: relative;
+  display: inline-block;
+  animation: fadeIn 1s 0.6s ease both;
+}
+.scroll-cue span {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 4px;
+  height: 8px;
+  margin-left: -2px;
+  background: var(--gold-light);
+  border-radius: 2px;
+  animation: scrollCue 1.6s ease-in-out infinite;
+}
+
+/* ===================== PRIZE ===================== */
+.prize {
+  background: var(--cream);
+  padding: 100px 0 90px;
+}
+
+.prize-card {
+  background: linear-gradient(160deg, #fff 0%, var(--cream-soft) 100%);
+  border-radius: 24px;
+  padding: 44px 36px 40px;
+  box-shadow: 0 24px 60px -20px rgba(107, 21, 36, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  border: 1px solid rgba(212,175,106,0.35);
+}
+
+.prize-card__graphic {
+  width: 190px;
+  margin-bottom: 8px;
+}
+
+.prize-card__text p {
+  font-size: 1.06rem;
+  line-height: 1.75;
+  color: var(--ink);
+  max-width: 560px;
+  margin: 0 0 16px;
+}
+
+.prize-card__highlight {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--wine);
+  margin-top: 20px !important;
+}
+
+/* ===================== AVAILABILITY ===================== */
+.availability {
+  background: linear-gradient(180deg, var(--wine-dark) 0%, var(--wine-deep) 100%);
+  color: var(--cream);
+  padding: 100px 0 90px;
+}
+
+.availability .divider--light {
+  filter: brightness(1.8);
+  opacity: 0.85;
+}
+
+.availability .section-title {
+  color: #fff;
+}
+
+.availability__copy {
+  font-size: 1.06rem;
+  line-height: 1.75;
+  color: var(--cream-soft);
+  max-width: 560px;
+  margin: 0 auto 14px;
+}
+
+.availability__copy--small {
+  font-size: 0.92rem;
+  opacity: 0.8;
+  margin-bottom: 34px;
+}
+
+.availability__names {
+  margin-top: 30px;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: var(--gold-light);
+  opacity: 0.85;
+}
+
+.btn {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  padding: 16px 40px;
+  border-radius: 50px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--wine-dark);
+  box-shadow: 0 14px 30px -10px rgba(212,175,106,0.6);
+}
+
+.btn--primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 36px -8px rgba(212,175,106,0.75);
+}
+
+/* ===================== FOOTER ===================== */
+.footer {
+  background: var(--cream);
+  text-align: center;
+  padding: 70px 24px 50px;
+}
+
+.footer__signature {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--wine-dark);
+  line-height: 1.6;
+  margin: 0 0 10px;
+}
+
+.footer__signature span {
+  font-style: italic;
+  color: var(--wine);
+}
+
+.footer__note {
+  font-size: 0.92rem;
+  color: #8a6f63;
+  margin: 0;
+}
+
+/* ===================== Scroll reveal ===================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===================== Animations ===================== */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scrollCue {
+  0% { top: 8px; opacity: 1; }
+  60% { top: 20px; opacity: 0; }
+  61% { top: 8px; opacity: 0; }
+  100% { top: 8px; opacity: 1; }
+}
+@keyframes revealPulse {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+/* ===================== Responsive ===================== */
+@media (max-width: 600px) {
+  .prize, .availability {
+    padding: 76px 0 64px;
+  }
+  .prize-card {
+    padding: 34px 22px 30px;
+  }
+  .footer {
+    padding: 56px 20px 40px;
+  }
+}

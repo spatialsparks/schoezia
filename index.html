@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>You Won! &mdash; A Gift for Joel &amp; Marzia</title>
+<meta name="description" content="Congratulations Joel & Marzia! Scratch, reveal, and discover your wedding getaway prize.">
+
+<link rel="icon" href="images/scratch-reveal.png" type="image/png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Lato:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<!-- Decorative floating grapes -->
+<div class="bg-decor bg-decor--top-left" aria-hidden="true"></div>
+<div class="bg-decor bg-decor--bottom-right" aria-hidden="true"></div>
+
+<main>
+
+  <!-- HERO / REVEAL -->
+  <section class="hero" id="hero">
+    <div class="hero__bg" style="background-image: url('images/hero-vineyard.png');"></div>
+    <div class="hero__overlay"></div>
+
+    <div class="hero__content">
+      <p class="eyebrow">A Wedding Surprise For</p>
+      <h1 class="hero__names">Joel <span class="amp">&amp;</span> Marzia</h1>
+
+      <div class="scratch-stage" id="scratch-stage">
+        <p class="scratch-hint" id="scratch-hint">Tap &amp; scratch the card below to reveal your prize</p>
+        <div class="scratch-card" id="scratch-card">
+          <canvas id="scratch-canvas" width="320" height="320"></canvas>
+          <div class="scratch-card__prize" id="scratch-prize">
+            <img src="images/scratch-reveal.png" alt="" class="scratch-prize__glow" aria-hidden="true">
+            <span class="scratch-prize__label">YOU&nbsp;WON!</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="hero__tagline">Congratulations on your wedding! We couldn't be happier for you two &mdash; scroll down to see exactly what you've won.</p>
+      <a href="#prize" class="scroll-cue" aria-label="Scroll to see the prize">
+        <span></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- THE PRIZE -->
+  <section class="prize" id="prize">
+    <div class="section-inner">
+      <img src="images/divider-vine.png" alt="" class="divider divider--top reveal" aria-hidden="true">
+
+      <p class="eyebrow eyebrow--dark reveal">The Grand Prize</p>
+      <h2 class="section-title reveal">A Weekend In The Vineyards</h2>
+
+      <div class="prize-card reveal">
+        <img src="images/prize-graphic.png" alt="Two glasses of red wine, grapes and a golden ribbon" class="prize-card__graphic">
+        <div class="prize-card__text">
+          <p>
+            From all of us &mdash; <strong>Manuel, Ramona, Alain, Celine &amp; Rebecca</strong> &mdash;
+            our wedding gift to you is a weekend getaway together, just the seven of us,
+            surrounded by rolling vineyards.
+          </p>
+          <p>
+            Think golden-hour walks between the vines, glasses of a truly great wine,
+            long dinners that stretch into the night, and lots of laughing about old times
+            (and probably a few embarrassing stories too).
+          </p>
+          <p class="prize-card__highlight">
+            Great wine. Great food. Great friends. All in one unforgettable weekend &mdash; on us.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SAVE THE DATE -->
+  <section class="availability" id="availability">
+    <div class="section-inner">
+      <img src="images/divider-vine.png" alt="" class="divider divider--top divider--light reveal" aria-hidden="true">
+
+      <p class="eyebrow eyebrow--dark reveal">Help Us Find The Date</p>
+      <h2 class="section-title reveal">Save The Date &mdash; 2027</h2>
+
+      <p class="availability__copy reveal">
+        The only thing standing between us and that weekend in the vineyards is
+        <em>one shared date</em>. To make sure everyone can actually be there &mdash;
+        Joel, Marzia, Manuel, Ramona, Alain, Celine and Rebecca &mdash; we're using a
+        quick poll to compare everyone's 2027 availability.
+      </p>
+      <p class="availability__copy availability__copy--small reveal">
+        It takes less than a minute. No account needed, just pick the weekends that work for you.
+      </p>
+
+      <a id="doodle-link" href="#" target="_blank" rel="noopener" class="btn btn--primary reveal">
+        Add My Availability
+      </a>
+
+      <p class="availability__names reveal">Joel &middot; Marzia &middot; Manuel &middot; Ramona &middot; Alain &middot; Celine &middot; Rebecca</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <img src="images/divider-vine.png" alt="" class="divider divider--footer reveal" aria-hidden="true">
+    <p class="footer__signature reveal">
+      With so much love,<br>
+      <span>Manuel, Ramona, Alain, Celine &amp; Rebecca</span>
+    </p>
+    <p class="footer__note reveal">Can't wait to celebrate with you two. See you in the vineyards. 🍷</p>
+  </footer>
+
+</main>
+
+<script src="js/script.js"></script>
+</body>
+</html>
