@@ -296,8 +296,15 @@ img { max-width: 100%; display: block; }
 }
 
 .prize-card__graphic {
-  width: 190px;
-  margin-bottom: 8px;
+  width: 220px;
+  max-width: 62%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 16px 34px -14px rgba(107, 21, 36, 0.4);
+  border: 5px solid #fff;
+  outline: 1px solid rgba(212, 175, 106, 0.4);
+  margin-bottom: 10px;
 }
 
 .prize-card__text p {
